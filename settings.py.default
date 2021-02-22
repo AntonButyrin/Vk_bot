@@ -1,0 +1,113 @@
+GROUP_ID = 198991770
+TOKEN = ''
+
+INTENTS = [
+    {
+        "name": "Приветствие",
+        "tokens": ("привет", "здравствуй", "добрый"),
+        "scenario": None,
+        "answer": "Доброе время суток, для заказа билета используйте команду /ticket. "
+                  "Для помощи /help."
+    },
+    {
+        "name": "Заказ билета",
+        "tokens": "/ticket",
+        "scenario": "buy_ticket",
+        "answer": None
+    },
+    {
+        "name": "Помощь",
+        "tokens": "/help",
+        "scenario": "help",
+        "answer": None
+    }
+]
+SCENARIOS = {
+    "buy_ticket": {
+        "first_step": "step1",
+        "steps": {
+            "step1": {
+                "text": "Введите Ваш город отправления.",
+                "failure_text": "город введён неправильно.\n"
+                                "Варианты городов: \n "
+                                "{fail}",
+                "handler": "handle_from",
+                "next_step": "step2"
+            },
+            "step2": {
+                "text": "Ваш город отправления: {fro}.\n "
+                        "Введите Ваш город назначения.",
+                "failure_text": "город введён неправильно.\n"
+                                "Варианты городов: \n"
+                                "{fail}",
+                "handler": "handle_to",
+                "next_step": "step3"
+
+            },
+            "step3": {
+                "text": "Ваш город прибытия: {to}.\n"
+                        "Введите дату отправления в формате ГГГГ-ММ-ДД.",
+                "failure_text": "формат даты неверен.\n"
+                                "Такой даты нет, но есть другие с интересующими Вас городами:\n"
+                                "{fail}",
+                "handler": "handle_date",
+                "next_step": "step4"
+            },
+            "step4": {
+                "text": "Ваша дата отправления: {data} .\n"
+                        " Выберите рейс(введите номер нужного Вам рейса).\n"
+                        " {number_voyage}",
+                "failure_text": "рейс отсутствует.",
+                "handler": "handle_voyage",
+                "next_step": "step5"
+            },
+            "step5": {
+                "text": "Выберите количество мест (от 1 до 5).",
+                "failure_text": "Выбрано неправильное количество мест.",
+                "handler": "handle_place",
+                "next_step": "step6"
+            },
+            "step6": {
+                "text": "Напишите комментарий к заказу.",
+                "failure_text": None,
+                "handler": "handle_comment",
+                "next_step": "step7"
+            },
+            "step7": {
+                "text": "Всё верно? да/нет.",
+                "failure_text": 'давайте попробуем еще раз? Для этого введите "/ticket"',
+                "handler": "handle_yesno",
+                "next_step": "step8"
+            },
+            "step8": {
+                "text": "Введите номер телефона в формате +77777777777.",
+                "failure_text": "Номер телефона введён неккоректно",
+                "handler": "handle_phone",
+                "next_step": "step9"
+            },
+            "step9": {
+                "text": 'Город вылета: {fro}\n'
+                        'Город прилета: {to}\n'
+                        'Дата вылета: {data}\n'
+                        'Рейс: {result}. \n'
+                        'Количество мест: {place}\n'
+                        'Комментарий: {comment}\n'
+                        'С вами свяжутся по указанному номеру телефона.',
+                'image': 'generate_ticket_handler',
+                "failure_text": None,
+                "handler": None,
+                "next_step": None
+            }
+
+        }
+    }
+}
+
+DEFAULT_ANSWER = "Так-так-так, а вот и ошибочка, всё по новой!:)"
+
+DB_CONFIG = dict(
+    provider='postgres',
+    user='postgres',
+    password='110294',
+    host='localhost',
+    database='postgres')
